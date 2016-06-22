@@ -11,7 +11,7 @@
 </div>
 
 {{#each comments}}
-    <div><p>Comment: {{this.body}}</p> <a href="/posts/{{this.post_id}}/{{this.comment_id}}">Delete</a></div>
+    <div><p>Comment: {{this.body}}</p> {{#if ismine}}<a href="/posts/{{this.post_id}}/{{this.comment_id}}">Delete</a>{{/if}}</div>
     <p>
         Commenter: {{this.username}}
     </p>

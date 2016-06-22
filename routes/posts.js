@@ -60,7 +60,7 @@ router.get('/:id', function (req, res, next) {
 
       knex('client').select().where('id', '=', req.session.userId).first(),
 
-      knex('post').select(["post.id as post_id","comment.body", "comment.id as comment_id", "comment.client_id", "client.username"])
+      knex('post').select(["post.id as post_id", "comment.body", "comment.id as comment_id", "comment.client_id", "client.username"])
       .join("comment", function() {
           this.on("post.id", "=", "comment.post_id")
       }).join('client', function() {
@@ -73,12 +73,18 @@ router.get('/:id', function (req, res, next) {
     var posts = data[0];
     var clients = data[1];
     var comments = data[2];
-    console.log(clients);
-    var author;
+    var author = false;
+    var commentor = false;
     if(req.session.userId == posts.client_id) {
         author = true;
     }
-    res.render('postDetail', {post: posts, clients: clients, comments: comments, author: author})
+    for(var i=0; i<comments.length; i++) {
+        if(req.session.userId == comments[i].client_id) {
+            commentor = true;
+            comments[i].ismine = true;
+        }
+    }
+    res.render('postDetail', {post: posts, clients: clients, comments: comments, author: author, commentor: commentor})
   })
 });
 
