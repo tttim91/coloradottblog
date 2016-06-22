@@ -3,13 +3,17 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('cookie-session');
 var bodyParser = require('body-parser');
-require('dotenv').load();
+var auth = require('./auth');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
+require('dotenv').load();
 
 var app = express();
+
+app.use(auth.passport.initialize());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,6 +25,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({keys: [process.env.SESSION_KEY1, process.env.SESSION_KEY2]}))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/posts', posts);

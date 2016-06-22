@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/addPost', function(req, res, next) {
-    knex('client').select()
+    knex('client').select().where('id', '=', req.session.userId).first()
     .then(function(resultsFromQuery) {
         res.render('addPost', {list:resultsFromQuery});
     })
@@ -22,9 +22,7 @@ router.get('/:id/edit', function (req, res, next) {
       knex('post').select(['client.last_name', 'client.username', 'post.title', 'post.body', 'post.id'])
       .join('client', 'post.client_id',
       'client.id').where('post.id', '=', req.params.id).first(),
-
-
-      knex('client').select()
+      knex('client').select().where('client.id', '=', req.session.userId).first()
   ])
   .then(function (data) {
   var post = data[0];
@@ -60,7 +58,7 @@ router.get('/:id', function (req, res, next) {
       })
       .where("post.id", "=",  req.params.id).first(),
 
-      knex('client').select(),
+      knex('client').select().where('id', '=', req.session.userId).first(),
 
       knex('post').select(["post.id as post_id","comment.body", "comment.id as comment_id", "comment.client_id", "client.username"])
       .join("comment", function() {
@@ -75,8 +73,12 @@ router.get('/:id', function (req, res, next) {
     var posts = data[0];
     var clients = data[1];
     var comments = data[2];
-    console.log(comments);
-    res.render('postDetail', {post: posts, clients: clients, comments: comments})
+    console.log(clients);
+    var author;
+    if(req.session.userId == posts.client_id) {
+        author = true;
+    }
+    res.render('postDetail', {post: posts, clients: clients, comments: comments, author: author})
   })
 });
 

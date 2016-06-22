@@ -1,10 +1,6 @@
 <form action="/posts/{{post.id}}/edit" method="post">
   <input type="text" name="title" value="{{post.title}}" placeholder="Title">
   <input type="text" name="body" value="{{post.body}}" placeholder="Post Here">
-  <select name="client_id">
-      {{#each client}}
-      <option value="{{this.id}}">{{this.last_name}}</option>
-      {{/each}}
-  </select>
-  <button type="submit" >Create</button>
+  <input type="hidden" name="client_id" value="{{client.id}}">
+  <button type="submit">Create</button>
 </form>

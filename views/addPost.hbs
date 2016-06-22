@@ -1,11 +1,7 @@
 <form action="/posts/addPost" method="post">
   <input type="text" name="title" placeholder="Title">
   <input type="text" name="body" placeholder="Post Here">
-  <select name="client_id">
-      {{#each list}}
-      <option value="{{this.id}}">{{this.last_name}}</option>
-      {{/each}}
-  </select>
+  <input type="hidden" name="client_id" value="{{list.id}}">
   <button type="submit">Create</button>
   <h2>{{error}}</h2>
   <a href="/posts">All Posts</a>

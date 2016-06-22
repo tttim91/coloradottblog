@@ -1,16 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var knex = require('../db/knex');
+var db = require('../db/api');
+var auth = require('../auth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    knex('client').select().then(function(resultsFromQuery) {
-        res.render('index', {list:resultsFromQuery});
-    })
-});
-
-router.get('/addUser', function(req, res, next) {
-    res.render('addUser');
+    res.render('index', {id: req.session.userId});
 });
 
 router.get('/:id/edit', function (req, res, next) {
@@ -41,14 +37,49 @@ router.get('/users/:id', function (req, res, next) {
   })
 });
 
-router.post('/addUser', function (req, res, next) {
-  knex('client').insert(req.body).then(function () {
-    res.redirect('/');
-  }).catch(function (err) {
-    console.log(err);
-    next(err)
-  })
+router.get('/signup', auth.isLoggedIn, function(req, res, next) {
+    res.render('auth/signup');
 })
+
+router.get('/login', auth.isLoggedIn, function(req, res, next) {
+    if(req.session.userId) {
+        res.redirect('/');
+    } else {
+        next();
+    }
+}, function(req, res, next) {
+    res.render('auth/login');
+})
+
+router.get('/logout', function(req, res, next) {
+    req.session = null;
+  res.redirect('/');
+});
+
+router.post('/login',
+function(req, res, next) {
+    auth.passport.authenticate('local', function(err, user, info) {
+            if(err) {
+                res.render('auth/login', {error: err})
+            } else if (user) {
+                req.session.userId = user.id;
+                res.redirect('/');
+            }
+    })(req, res, next);
+});
+
+router.post('/signup', function(req, res, next) {
+  db.findUserByUsername(req.body.username).then(function (user) {
+      if(user) {
+          res.render('auth/signup', {error: "user already exists"})
+      } else {
+          auth.createUser(req.body).then(function (id) {
+              req.session.userId = id
+              res.redirect('/')
+          })
+      }
+  })
+});
 
 
 

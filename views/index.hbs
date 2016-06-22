@@ -1,12 +1,7 @@
-<h2>Users</h2>
-
-<ul>
-  {{#each list}}
-    <li>
-      <a href="/users/{{this.id}}">{{this.username}}</a>
-    </li>
-  {{/each}}
-</ul>
-
-<a href="/addUser">Create new User</a>
+{{#if id}}
+<a href="/logout" class="button">Logout</a>
 <a href="/posts">See all blog posts</a>
+{{else}}
+<a href="/login" class="button">Login</a>
+<a href="/signup" class="button">Sign Up</a>
+{{/if}}
