@@ -1,0 +1,12 @@
+<h2>Users</h2>
+
+<ul>
+  {{#each list}}
+    <li>
+      <a href="/users/{{this.id}}">{{this.username}}</a>
+    </li>
+  {{/each}}
+</ul>
+
+<a href="/addUser">Create new User</a>
+<a href="/posts">See all blog posts</a>

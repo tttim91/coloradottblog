@@ -1,0 +1,28 @@
+<h2>{{post.title}}</h2>
+<p>{{post.body}}</p>
+<a href="/">Home</a>
+<a href="/posts/{{post.post_id}}/edit">Edit</a>
+<a href="/posts/{{post.post_id}}/delete">Delete</a>
+<a href="/posts">See All Posts</a>
+<div >
+  Username: {{post.username}}
+</div>
+{{#each comments}}
+    <div><p>Comment: {{this.body}}</p> <a href="/posts/{{this.post_id}}/{{this.comment_id}}">Delete</a></div>
+    <p>
+        Client id: {{this.client_id}}
+    </p>
+{{/each}}
+
+<h2>Add a comment</h2>
+<form action="/posts/{{post.post_id}}" method="post">
+    <input type="text" name="body" placeholder="Comment">
+    <select name="client_id">
+        {{#each clients}}
+        <option selected value="{{this.id}}">{{this.username}}
+        </option>
+        {{/each}}
+    </select>
+    <input type="hidden" name="post_id" value="{{post.post_id}}">
+    <button type="submit">Submit</button>
+</form>
