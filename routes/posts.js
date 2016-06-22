@@ -62,9 +62,11 @@ router.get('/:id', function (req, res, next) {
 
       knex('client').select(),
 
-      knex('comment').select(["post.id as post_id", "comment.body", "comment.id as comment_id", "comment.client_id"])
-      .join("post", function() {
+      knex('post').select(["post.id as post_id","comment.body", "comment.id as comment_id", "comment.client_id", "client.username"])
+      .join("comment", function() {
           this.on("post.id", "=", "comment.post_id")
+      }).join('client', function() {
+          this.on("client.id", "=", "comment.client_id")
       })
       .where("post.id", "=", req.params.id)
 
@@ -73,7 +75,7 @@ router.get('/:id', function (req, res, next) {
     var posts = data[0];
     var clients = data[1];
     var comments = data[2];
-    console.log(posts);
+    console.log(comments);
     res.render('postDetail', {post: posts, clients: clients, comments: comments})
   })
 });
