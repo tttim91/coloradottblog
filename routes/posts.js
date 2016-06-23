@@ -4,7 +4,7 @@ var knex = require('../db/knex');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    knex('post').select().join('client', function() {
+    knex('post').select(["post.id as post_id", "post.title", "post.body", "client.username"]).join('client', function() {
         this.on('post.client_id', '=', 'client.id')
     }).then(function(resultsFromQuery) {
         res.render('posts', {list:resultsFromQuery});
