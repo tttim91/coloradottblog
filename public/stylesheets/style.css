@@ -18,7 +18,7 @@ h1 {
     position: relative;
     height: 50px;
     width: 98.5vw;
-    background-color: lightblue;
+    background-color: darkblue;
     top: -20px;
     left: -10px;
     padding: 20px 0px 20px 20px;
@@ -30,7 +30,7 @@ li {
 
 .logo {
     text-decoration: none;
-    color: darkblue;
+    color: white;
 }
 
 .postage {
