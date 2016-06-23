@@ -1,15 +1,18 @@
 <h2>Posts</h2>
 
-<ul>
-  {{#each list}}
-    <li>
-      <a href="/posts/{{this.id}}">{{this.title}}</a>
-    </li>
-    <li>
+{{#each list}}
+    <div class="post">
+    <p>
+      <a href="/posts/{{this.id}}" class="postTitle">{{this.title}}</a>
+  </p>
+    <p>
         {{this.body}}
-    </li>
-   {{/each}}
-</ul>
+    </p>
+    <p>
+        Poster: {{this.username}}
+    </p>
+</div>
+{{/each}}
 
 <a href="/posts/addPost">Create new post</a>
 <a href="/">Home</a>

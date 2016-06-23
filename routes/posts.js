@@ -4,9 +4,10 @@ var knex = require('../db/knex');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    knex('post').select().then(function(resultsFromQuery) {
+    knex('post').select().join('client', function() {
+        this.on('post.client_id', '=', 'client.id')
+    }).then(function(resultsFromQuery) {
         res.render('posts', {list:resultsFromQuery});
-
     })
 });
 
@@ -25,9 +26,9 @@ router.get('/:id/edit', function (req, res, next) {
       knex('client').select().where('client.id', '=', req.session.userId).first()
   ])
   .then(function (data) {
-  var post = data[0];
-  var client = data[1];
-    res.render('editPost', {post: post, client: client})
+      var post = data[0];
+      var client = data[1];
+      res.render('editPost', {post: post, client: client})
   })
 })
 
